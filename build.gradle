@@ -1,0 +1,21 @@
+apply plugin: 'java'
+
+task hello {
+    print 'hello, init'
+}
+
+hello << {
+    print 'hello, work'
+}
+
+task work(dependsOn : hello) << {
+    println 'work starts here'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.11'
+}
