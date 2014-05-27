@@ -34,5 +34,6 @@ public class Person
 
     private String name;
     private Set<Phone> phones;
+    private String lastname;
 
 }
