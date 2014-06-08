@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by user on 27.05.14.
@@ -33,10 +34,12 @@ public class Person
             return false;
 
         if (obj instanceof Person)
-            return name.equals(((Person)obj).getName());
+            //return name.equals(((Person)obj).getName());
+		return StringUtils.equals(((Person)obj).getName(), this.name);
 
         return false;
     }
+
 
     private String name;
     private Set<Phone> phones;
