@@ -8,6 +8,9 @@ import java.util.Set;
 /*
  some changes for commit and merge
 */
+/* 
+add new comment in branch dev
+*/
 public class Person
 {
     public Person(String name, Set<Phone> phones) {
