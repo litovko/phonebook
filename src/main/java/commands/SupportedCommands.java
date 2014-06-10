@@ -20,17 +20,14 @@ public class SupportedCommands extends CommandFacroryBase
 {
     public SupportedCommands()
     {
-        register(CommandAdd.NAME, new CommandAdd());
+        register(CommandAdd.NAME,  new CommandAddBuilder());
         register(CommandList.NAME, new CommandList());
     }
 
-    public static class CommandAdd implements Command, CommandBuilder
+    public static class CommandAdd implements Command
     {
         public static final String NAME = "add";
 
-        public CommandAdd()
-        {
-        }
 
         public CommandAdd(String person, String phone)
         {
@@ -54,9 +51,16 @@ public class SupportedCommands extends CommandFacroryBase
             return NAME;
         }
 
-        @Override
-        public Command createCommand(Params params) {
+        private String person;
+        private String phone;
+    }
 
+
+    public static class CommandAddBuilder implements CommandBuilder
+    {
+        @Override
+        public Command createCommand(Params params)
+        {
             String[] args = null;
 
             if (StringUtils.isNotEmpty(params.getCommandArgs()))
@@ -67,9 +71,6 @@ public class SupportedCommands extends CommandFacroryBase
 
             return new CommandAdd(args[0], args[1]);
         }
-
-        private String person;
-        private String phone;
     }
 
 
