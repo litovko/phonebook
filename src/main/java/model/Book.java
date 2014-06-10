@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -8,6 +9,7 @@ import java.util.Set;
 public class Book {
 
     public Book() {
+        persons = new HashSet<>();
     }
 
     public Book(Set<Person> persons) {

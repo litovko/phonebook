@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -7,6 +8,12 @@ import java.util.Set;
  */
 public class Person
 {
+    public Person(String name)
+    {
+        this.name = name;
+        this.phones = new HashSet<>();
+    }
+
     public Person(String name, Set<Phone> phones) {
         this.name = name;
         this.phones = phones;
