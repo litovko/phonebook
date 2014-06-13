@@ -42,8 +42,8 @@ public class FrontController
         do
         {
             cmd_line = getView().getNextCommandLine();
-
-            getExecutor().execute(cmd_line);
+            if (!cmd_line.isEmpty()) //skip if nothing to execute
+                getExecutor().execute(cmd_line);
 
 
 

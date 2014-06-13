@@ -6,10 +6,7 @@ import model.Person;
 import model.Phone;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * (c) Roman Gordeev
@@ -22,8 +19,8 @@ public class SupportedCommands extends CommandFacroryBase
     {
         register(CommandAdd.NAME,  new CommandAddBuilder());
         register(CommandList.NAME, new CommandList());
+        register(CommandDelete.NAME, new CommandDeleteBuilder());
     }
-
     public static class CommandAdd implements Command
     {
         public static final String NAME = "add";
@@ -115,5 +112,61 @@ public class SupportedCommands extends CommandFacroryBase
         public Command createCommand(Params params) {
             return new CommandList();
         }
+    }
+    public static class CommandDeleteBuilder implements CommandBuilder
+    {
+        @Override
+        public Command createCommand(Params params)
+        {
+            String[] args = null;
+
+            if (StringUtils.isNotEmpty(params.getCommandArgs()))
+                args = StringUtils.split(params.getCommandArgs());
+
+            if (args == null)
+                return UnknownCommand.getInstance();
+            return new CommandDelete(args[0]);
+        }
+    }
+
+    public static class CommandDelete implements Command
+    {
+        public static final String NAME = "del";
+        public CommandDelete(String person)
+        {
+            this.person = person;
+        }
+        @Override
+        public void execute(Book model)
+        {
+            Set<Person> sp = model.getPersons();
+            for (Person p : sp)
+                if (this.person.equals(p.getName())) {
+                    sp.remove(p);
+                    System.out.println("Person:"+ this.person+" deleted!");
+                    return;
+                }
+            System.out.println("Does not found person:"+ this.person+"!");
+
+
+        }
+
+        private void printPerson(Person person)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Person: ").append(person.getName()).append("\n").append("phones: ");
+            for (Phone phone : person.getPhones())
+                sb.append(phone.getPhone()).append("\n");
+
+            System.out.println(sb.toString());
+        }
+
+        @Override
+        public String getName() {
+            return NAME;
+        }
+
+
+        private String person;
     }
 }
