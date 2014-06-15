@@ -19,7 +19,9 @@ public class SupportedCommands extends CommandFacroryBase
     {
         register(CommandAdd.NAME,  new CommandAddBuilder());
         register(CommandList.NAME, new CommandList());
+        register(CommandExit.NAME, new CommandExit());
         register(CommandDelete.NAME, new CommandDeleteBuilder());
+        register(CommandUpdate.NAME, new CommandUpdateBuilder());
     }
     public static class CommandAdd implements Command
     {
@@ -151,15 +153,56 @@ public class SupportedCommands extends CommandFacroryBase
 
         }
 
-        private void printPerson(Person person)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Person: ").append(person.getName()).append("\n").append("phones: ");
-            for (Phone phone : person.getPhones())
-                sb.append(phone.getPhone()).append("\n");
-
-            System.out.println(sb.toString());
+        @Override
+        public String getName() {
+            return NAME;
         }
+
+
+        private String person;
+    }
+    public static class CommandUpdateBuilder implements CommandBuilder
+    {
+        @Override
+        public Command createCommand(Params params)
+        {
+            String[] args = null;
+
+            if (StringUtils.isNotEmpty(params.getCommandArgs()))
+                args = StringUtils.split(params.getCommandArgs());
+
+            if (args == null|| args.length<2)
+                return UnknownCommand.getInstance();
+            return new CommandUpdate(args[0], args[1]);
+        }
+    }
+
+    public static class CommandUpdate implements Command
+    {
+        public static final String NAME = "update";
+        public CommandUpdate(String person, String phone)
+        {
+            this.person = person;
+            this.phone = phone;
+        }
+
+
+        @Override
+        public void execute(Book model)
+        {
+            Set<Person> sp = model.getPersons();
+
+            for (Person p : sp)
+                if (this.person.equals(p.getName())) {
+                    p.getPhones().add(new Phone(p, this.phone));
+                        System.out.println("Person:"+ this.person+" updated by phone:"+this.phone);
+                    return;
+                }
+            System.out.println("Does not found person:"+ this.person+"!");
+
+
+        }
+
 
         @Override
         public String getName() {
@@ -168,5 +211,30 @@ public class SupportedCommands extends CommandFacroryBase
 
 
         private String person;
+        private String phone;
+    }
+    public static class CommandExit implements Command, CommandBuilder
+    {
+        public static final String NAME = "exit";
+
+        @Override
+        public void execute(Book model)
+        {
+            System.exit(0);
+
+
+        }
+
+
+
+        @Override
+        public String getName() {
+            return NAME;
+        }
+
+        @Override
+        public Command createCommand(Params params) {
+            return new CommandList();
+        }
     }
 }
