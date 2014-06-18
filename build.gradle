@@ -6,6 +6,8 @@ repositories {
 }
 
 dependencies {
+
+    compile 'org.postgresql:postgresql:9.2-1004-jdbc4'
     compile 'com.google.inject:guice:3.0'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     testCompile 'junit:junit:4.11'
