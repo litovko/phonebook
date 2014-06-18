@@ -24,7 +24,7 @@ public class FrontController
 
     private FrontController()
     {
-
+       this.ap = new AppContext();
     }
 
     public void init(ConsoleView view, Executor executor)
@@ -38,6 +38,9 @@ public class FrontController
         String cmd_line = null;
 
         Scanner in = new Scanner(System.in);
+        exit       = false;
+
+        getExecutor().init(ap);
 
         do
         {
@@ -48,7 +51,7 @@ public class FrontController
 
 
 
-        } while (true);
+        } while (!exit);
     }
 
     public ConsoleView getView()
@@ -69,4 +72,15 @@ public class FrontController
     private ConsoleView view;
     private Book        model;
     private Executor    executor;
+    private boolean     exit;
+    private ApplicationContext ap;
+
+    private class AppContext implements ApplicationContext
+    {
+        @Override
+        public void exit() {
+            FrontController.this.exit = true;
+        }
+    }
+
 }

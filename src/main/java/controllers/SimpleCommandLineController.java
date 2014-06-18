@@ -33,7 +33,7 @@ public class SimpleCommandLineController implements CommandLineController
         String[] row_data = StringUtils.split(commandLine);
 
         if (row_data == null || row_data.length == 0)
-            return null;
+            return new Params("", "");
 
         cmd_name = row_data[0];
 

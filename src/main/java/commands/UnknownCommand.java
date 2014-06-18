@@ -1,5 +1,6 @@
 package commands;
 
+import controllers.ApplicationContext;
 import model.Book;
 
 /**
@@ -19,7 +20,7 @@ public class UnknownCommand implements Command
     public static final String NAME = "unknown";
 
     @Override
-    public void execute(Book model)
+    public void execute(Book model, ApplicationContext ap)
     {
         System.out.println("you've entered unknown command");
     }

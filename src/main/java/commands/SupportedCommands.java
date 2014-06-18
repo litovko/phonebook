@@ -1,5 +1,6 @@
 package commands;
 
+import controllers.ApplicationContext;
 import model.Book;
 import model.Params;
 import model.Person;
@@ -22,6 +23,7 @@ public class SupportedCommands extends CommandFacroryBase
     {
         register(CommandAdd.NAME,  new CommandAddBuilder());
         register(CommandList.NAME, new CommandList());
+        register(ExitCommand.NAME, new ExitCommand());
     }
 
     public static class CommandAdd implements Command
@@ -36,7 +38,7 @@ public class SupportedCommands extends CommandFacroryBase
         }
 
         @Override
-        public void execute(Book model)
+        public void execute(Book model, ApplicationContext ap)
         {
             Person person = new Person(this.person);
 
@@ -79,7 +81,7 @@ public class SupportedCommands extends CommandFacroryBase
         public static final String NAME = "list";
 
         @Override
-        public void execute(Book model)
+        public void execute(Book model, ApplicationContext ap)
         {
             List<Person> copy = new ArrayList<>(model.getPersons());
             Collections.sort(copy, new Comparator<Person>()
