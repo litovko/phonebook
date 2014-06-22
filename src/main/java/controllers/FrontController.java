@@ -24,20 +24,22 @@ public class FrontController
 
     private FrontController()
     {
-
     }
 
     public void init(ConsoleView view, Executor executor)
     {
         this.view = view;
         this.executor = executor;
+        this.condition = new Condition();
     }
 
     public void process()
     {
         String cmd_line = null;
 
+
         Scanner in = new Scanner(System.in);
+
 
         do
         {
@@ -45,11 +47,26 @@ public class FrontController
             if (!cmd_line.isEmpty()) //skip if nothing to execute
                 getExecutor().execute(cmd_line);
 
-
-
-
-        } while (true);
+        } while (condition.isTo_run());
     }
+    public class Condition{
+        private boolean To_run;
+
+        public Condition() {
+            To_run = true;
+        }
+
+        public boolean isTo_run() {
+            return To_run;
+        }
+
+        public void setTo_run(boolean to_run) {
+            To_run = to_run;
+        }
+    }
+
+
+
 
     public ConsoleView getView()
     {
@@ -69,4 +86,5 @@ public class FrontController
     private ConsoleView view;
     private Book        model;
     private Executor    executor;
+    private Condition   condition;
 }
