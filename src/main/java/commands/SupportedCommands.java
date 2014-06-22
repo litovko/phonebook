@@ -1,10 +1,16 @@
 package commands;
 
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import controllers.ApplicationContext;
 import model.Book;
 import model.Params;
 import model.Person;
 import model.Phone;
 import org.apache.commons.lang3.StringUtils;
+import services.DBModule;
+import services.StorageService;
 
 import java.util.*;
 
@@ -17,11 +23,20 @@ public class SupportedCommands extends CommandFacroryBase
 {
     public SupportedCommands()
     {
-        register(CommandAdd.NAME,  new CommandAddBuilder());
-        register(CommandList.NAME, new CommandList());
-        register(CommandExit.NAME, new CommandExit());
+//<<<<<<< HEAD
+      //  register(CommandAdd.NAME,  new CommandAddBuilder());
+        //register(CommandList.NAME, new CommandList());
+        //register(CommandExit.NAME, new CommandExit());
         register(CommandDelete.NAME, new CommandDeleteBuilder());
         register(CommandUpdate.NAME, new CommandUpdateBuilder());
+//=======
+        Injector injector = Guice.createInjector(new DBModule());
+
+
+        register(CommandAdd.NAME,  new CommandAddBuilder(injector));
+        register(CommandList.NAME, new CommandListBuilder(injector));
+        register(ExitCommand.NAME, new ExitCommand());
+//>>>>>>> f79e7c237e7f2e631ae8a0c3398198cb21471bb1
     }
     public static class CommandAdd implements Command
     {
@@ -35,12 +50,10 @@ public class SupportedCommands extends CommandFacroryBase
         }
 
         @Override
-        public void execute(Book model)
+        public void execute(Book model, ApplicationContext ap)
         {
-            Person person = new Person(this.person);
 
-            person.getPhones().add(new Phone(person, this.phone));
-            model.getPersons().add(person);
+            storage.add(this.person, this.phone, model);
 
             System.out.println(getName() + ": person " + this.person + " was added to the book, phone is: " + this.phone);
         }
@@ -50,13 +63,26 @@ public class SupportedCommands extends CommandFacroryBase
             return NAME;
         }
 
+        @Inject
+        public void setStorage(StorageService storage)
+        {
+            this.storage = storage;
+        }
+
         private String person;
         private String phone;
+
+        private StorageService storage;
     }
 
 
     public static class CommandAddBuilder implements CommandBuilder
     {
+        public CommandAddBuilder(Injector injector)
+        {
+            this.injector = injector;
+        }
+
         @Override
         public Command createCommand(Params params)
         {
@@ -68,29 +94,42 @@ public class SupportedCommands extends CommandFacroryBase
             if (args == null || args.length != 2)
                 return UnknownCommand.getInstance();
 
-            return new CommandAdd(args[0], args[1]);
+            Command add = new CommandAdd(args[0], args[1]);
+            injector.injectMembers(add);
+
+            return add;
+
         }
+
+        private Injector injector;
     }
 
+    public static class CommandListBuilder implements CommandBuilder
+    {
+        public CommandListBuilder(Injector injector)
+        {
+            this.injector = injector;
+        }
 
-    public static class CommandList implements Command, CommandBuilder
+        @Override
+        public Command createCommand(Params params)
+        {
+            return injector.getInstance(CommandList.class);
+        }
+
+        private Injector injector;
+    }
+
+    public static class CommandList implements Command
     {
         public static final String NAME = "list";
 
         @Override
-        public void execute(Book model)
+        public void execute(Book model, ApplicationContext ap)
         {
-            List<Person> copy = new ArrayList<>(model.getPersons());
-            Collections.sort(copy, new Comparator<Person>()
-            {
-                @Override
-                public int compare(Person o1, Person o2)
-                {
-                    return o1.getName().compareToIgnoreCase(o2.getName());
-                }
-            });
+            List<Person> persons = storage.list(model);
 
-            for (Person p : copy)
+            for (Person p : persons)
                 printPerson(p);
 
         }
@@ -110,10 +149,13 @@ public class SupportedCommands extends CommandFacroryBase
             return NAME;
         }
 
-        @Override
-        public Command createCommand(Params params) {
-            return new CommandList();
+        @Inject
+        public void setStorage(StorageService storage)
+        {
+            this.storage = storage;
         }
+
+        private StorageService storage;
     }
     public static class CommandDeleteBuilder implements CommandBuilder
     {
@@ -139,7 +181,7 @@ public class SupportedCommands extends CommandFacroryBase
             this.person = person;
         }
         @Override
-        public void execute(Book model)
+        public void execute(Book model, ApplicationContext ap)
         {
             Set<Person> sp = model.getPersons();
             for (Person p : sp)
@@ -188,7 +230,7 @@ public class SupportedCommands extends CommandFacroryBase
 
 
         @Override
-        public void execute(Book model)
+        public void execute(Book model, ApplicationContext ap)
         {
             Set<Person> sp = model.getPersons();
 
@@ -218,9 +260,9 @@ public class SupportedCommands extends CommandFacroryBase
         public static final String NAME = "exit";
 
         @Override
-        public void execute(Book model)
+        public void execute(Book model,  ApplicationContext ap)
         {
-            System.exit(0);
+            ap.exit();
 
 
         }

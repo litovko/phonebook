@@ -14,13 +14,21 @@ public class SimpleCommandLineControllerTest
     @Test
     public void testForNull()
     {
-        assertNull(SimpleCommandLineController.getInstance().parseCommandLineString(null));
+        CommandLineController c = SimpleCommandLineController.getInstance();
+        Params p = c.parseCommandLineString(null);
+
+        assertEquals("", p.getCommandName());
+        assertEquals("", p.getCommandArgs());
     }
 
     @Test
     public void testForEmpty()
     {
-        assertNull(SimpleCommandLineController.getInstance().parseCommandLineString(""));
+        CommandLineController c = SimpleCommandLineController.getInstance();
+        Params p = c.parseCommandLineString("");
+
+        assertEquals("", p.getCommandName());
+        assertEquals("", p.getCommandArgs());
     }
 
     @Test

@@ -2,8 +2,8 @@ package executors;
 
 import commands.Command;
 import commands.CommandFactory;
+import controllers.ApplicationContext;
 import controllers.CommandLineController;
-import controllers.SimpleCommandLineController;
 import model.Book;
 import model.Params;
 
@@ -34,9 +34,14 @@ public class Executor
         Params params = getController().parseCommandLineString(commandLine);
         Command command = getCommandFactory().createCommand(params);
 
-        command.execute(getModel());
+        command.execute(getModel(), ap);
 
         //System.out.println(params.toString());
+    }
+
+    public void init(ApplicationContext ap)
+    {
+        this.ap = ap;
     }
 
     public Book getModel()
@@ -57,4 +62,5 @@ public class Executor
     private Book model;
     private CommandLineController controller;
     private CommandFactory commandFactory;
+    private ApplicationContext ap;
 }
