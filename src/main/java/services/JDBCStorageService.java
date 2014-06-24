@@ -29,7 +29,7 @@ public class JDBCStorageService implements StorageService
 
     public void del (String personName, Book book)
     {
-
+        TransactionScript.getInstance().delPerson(personName);
     }
     @Override
     public void update(String personName, String phone, Book book)
@@ -112,6 +112,37 @@ public class JDBCStorageService implements StorageService
                     addPhone.setString(2, phone);
                     addPhone.execute();
                 }
+
+
+
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        public void delPerson(String person)
+        {
+            try
+            {
+                PreparedStatement delPerson = connection.prepareStatement("delete from person where name=? and book_id=?; ", Statement.RETURN_GENERATED_KEYS);
+
+
+                delPerson.setInt(2, 1);
+
+                delPerson.setString(1, person);
+
+                delPerson.execute();
+
+              /*  ResultSet auto_pk = delPerson.getGeneratedKeys();
+                while (auto_pk.next())
+                {
+                    int id = auto_pk.getInt("id");
+                    addPhone.setInt(1, id);
+                    addPhone.setString(2, phone);
+                    addPhone.execute();
+                }
+                */
 
 
 

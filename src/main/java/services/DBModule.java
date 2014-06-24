@@ -10,14 +10,15 @@ import com.google.inject.AbstractModule;
 public class DBModule extends AbstractModule
 {
     @Override
-    protected void configure()
+ /*   protected void configure()
     {
         bind(StorageService.class).to(InMemoryStorage.class);
     }
-/*
+    */
+
     protected void configure()
     {
         bind(StorageService.class).to(JDBCStorageService.class);
     }
-*/
+
 }
