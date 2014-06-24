@@ -27,6 +27,16 @@ public class JDBCStorageService implements StorageService
         return TransactionScript.getInstance().listPersons("1");
     }
 
+    public void del (String personName, Book book)
+    {
+
+    }
+    @Override
+    public void update(String personName, String phone, Book book)
+    {
+
+    }
+
     public static final class TransactionScript
     {
         private static final TransactionScript instance = new TransactionScript();
@@ -37,7 +47,7 @@ public class JDBCStorageService implements StorageService
 
         public TransactionScript()
         {
-            String url      = "jdbc:postgresql://192.168.56.101/phonebook";
+            String url      = "jdbc:postgresql://localhost/phonebook";
             String login    = "postgres";
             String password = "123456";
 

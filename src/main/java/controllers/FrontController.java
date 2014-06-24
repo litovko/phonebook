@@ -87,5 +87,4 @@ public class FrontController
         }
     }
 
-//>>>>>>> f79e7c237e7f2e631ae8a0c3398198cb21471bb1
 }

@@ -14,10 +14,10 @@ public class DBModule extends AbstractModule
     {
         bind(StorageService.class).to(InMemoryStorage.class);
     }
-   /*
+/*
     protected void configure()
     {
         bind(StorageService.class).to(JDBCStorageService.class);
     }
-    */
+*/
 }

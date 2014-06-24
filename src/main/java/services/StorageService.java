@@ -13,6 +13,8 @@ import java.util.List;
 public interface StorageService
 {
     void add(String personName, String phone, Book book);
+    void update(String personName, String phone, Book book);
 
     List<Person> list(Book book);
+    void del(String personName, Book book);
 }

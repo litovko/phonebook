@@ -27,16 +27,17 @@ public class SupportedCommands extends CommandFacroryBase
       //  register(CommandAdd.NAME,  new CommandAddBuilder());
         //register(CommandList.NAME, new CommandList());
         //register(CommandExit.NAME, new CommandExit());
-        register(CommandDelete.NAME, new CommandDeleteBuilder());
-        register(CommandUpdate.NAME, new CommandUpdateBuilder());
-//=======
+
+
         Injector injector = Guice.createInjector(new DBModule());
 
 
         register(CommandAdd.NAME,  new CommandAddBuilder(injector));
         register(CommandList.NAME, new CommandListBuilder(injector));
+        register(CommandDelete.NAME, new CommandDeleteBuilder(injector));
+        register(CommandUpdate.NAME, new CommandUpdateBuilder(injector));
         register(ExitCommand.NAME, new ExitCommand());
-//>>>>>>> f79e7c237e7f2e631ae8a0c3398198cb21471bb1
+
     }
     public static class CommandAdd implements Command
     {
@@ -159,6 +160,13 @@ public class SupportedCommands extends CommandFacroryBase
     }
     public static class CommandDeleteBuilder implements CommandBuilder
     {
+        public CommandDeleteBuilder(Injector injector)
+        {
+            this.injector = injector;
+        }
+
+
+        private Injector injector;
         @Override
         public Command createCommand(Params params)
         {
@@ -169,7 +177,10 @@ public class SupportedCommands extends CommandFacroryBase
 
             if (args == null)
                 return UnknownCommand.getInstance();
-            return new CommandDelete(args[0]);
+
+            Command del = new CommandDelete(args[0]);
+            injector.injectMembers(del);
+            return del;
         }
     }
 
@@ -183,14 +194,8 @@ public class SupportedCommands extends CommandFacroryBase
         @Override
         public void execute(Book model, ApplicationContext ap)
         {
-            Set<Person> sp = model.getPersons();
-            for (Person p : sp)
-                if (this.person.equals(p.getName())) {
-                    sp.remove(p);
-                    System.out.println("Person:"+ this.person+" deleted!");
-                    return;
-                }
-            System.out.println("Does not found person:"+ this.person+"!");
+
+            storage.del(this.person, model);
 
 
         }
@@ -200,11 +205,21 @@ public class SupportedCommands extends CommandFacroryBase
             return NAME;
         }
 
+        @Inject
+        public void setStorage(StorageService storage)
+        {
+            this.storage = storage;
+        }
 
         private String person;
+        private StorageService storage;
     }
     public static class CommandUpdateBuilder implements CommandBuilder
     {
+        public CommandUpdateBuilder(Injector injector)
+        {
+            this.injector = injector;
+        }
         @Override
         public Command createCommand(Params params)
         {
@@ -215,8 +230,12 @@ public class SupportedCommands extends CommandFacroryBase
 
             if (args == null|| args.length<2)
                 return UnknownCommand.getInstance();
-            return new CommandUpdate(args[0], args[1]);
+
+            Command update = new CommandUpdate(args[0], args[1]);
+            injector.injectMembers(update);
+            return update;
         }
+        private Injector injector;
     }
 
     public static class CommandUpdate implements Command
@@ -232,17 +251,7 @@ public class SupportedCommands extends CommandFacroryBase
         @Override
         public void execute(Book model, ApplicationContext ap)
         {
-            Set<Person> sp = model.getPersons();
-
-            for (Person p : sp)
-                if (this.person.equals(p.getName())) {
-                    p.getPhones().add(new Phone(p, this.phone));
-                        System.out.println("Person:"+ this.person+" updated by phone:"+this.phone);
-                    return;
-                }
-            System.out.println("Does not found person:"+ this.person+"!");
-
-
+            storage.update(person, phone, model);
         }
 
 
@@ -250,7 +259,13 @@ public class SupportedCommands extends CommandFacroryBase
         public String getName() {
             return NAME;
         }
+        @Inject
+        public void setStorage(StorageService storage)
+        {
+            this.storage = storage;
+        }
 
+        private StorageService storage;
 
         private String person;
         private String phone;
