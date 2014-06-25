@@ -29,18 +29,19 @@ public class SupportedCommands extends CommandFacroryBase
         Injector injector = Guice.createInjector(new DBModule());
 
 
-        register(CommandAdd.NAME,  new CommandAddBuilder(injector));
-        register(CommandList.NAME, new CommandListBuilder(injector));
-        register(ExitCommand.NAME, new ExitCommand());
+        register(CommandAdd.NAME,  injector.getInstance(CommandAddBuilder.class));
+        register(CommandList.NAME, injector.getInstance(CommandListBuilder.class));
+        register(ExitCommand.NAME, injector.getInstance(ExitCommand.class));
     }
 
-    public static class CommandAdd implements Command
+    public static class CommandAdd extends AbstractCommand
     {
         public static final String NAME = "add";
 
 
-        public CommandAdd(String person, String phone)
+        public CommandAdd(String person, String phone, StorageService storage)
         {
+            super(storage);
             this.person = person;
             this.phone = phone;
         }
@@ -59,24 +60,18 @@ public class SupportedCommands extends CommandFacroryBase
             return NAME;
         }
 
-        @Inject
-        public void setStorage(StorageService storage)
-        {
-            this.storage = storage;
-        }
-
         private String person;
         private String phone;
 
-        private StorageService storage;
     }
 
 
-    public static class CommandAddBuilder implements CommandBuilder
-    {
-        public CommandAddBuilder(Injector injector)
+    public static class CommandAddBuilder extends AbstractCommandBuilder {
+
+        @Inject
+        public CommandAddBuilder(StorageService storageService)
         {
-            this.injector = injector;
+            super(storageService);
         }
 
         @Override
@@ -90,35 +85,42 @@ public class SupportedCommands extends CommandFacroryBase
             if (args == null || args.length != 2)
                 return UnknownCommand.getInstance();
 
-            Command add = new CommandAdd(args[0], args[1]);
-            injector.injectMembers(add);
+            Command add = new CommandAdd(args[0], args[1], service);
+            /*add.
+            injector.injectMembers(add);*/
 
             return add;
 
         }
 
-        private Injector injector;
+        //private Injector injector;
     }
 
-    public static class CommandListBuilder implements CommandBuilder
+    public static class CommandListBuilder extends AbstractCommandBuilder
     {
-        public CommandListBuilder(Injector injector)
-        {
-            this.injector = injector;
+        @Inject
+        public CommandListBuilder(StorageService storageService) {
+            super(storageService);
+
         }
 
         @Override
         public Command createCommand(Params params)
         {
-            return injector.getInstance(CommandList.class);
+            return new CommandList(getService());
         }
 
-        private Injector injector;
     }
 
-    public static class CommandList implements Command
+    public static class CommandList extends AbstractCommand
     {
         public static final String NAME = "list";
+
+
+        public CommandList(StorageService storage)
+        {
+            super(storage);
+        }
 
         @Override
         public void execute(Book model, ApplicationContext ap)
@@ -145,12 +147,5 @@ public class SupportedCommands extends CommandFacroryBase
             return NAME;
         }
 
-        @Inject
-        public void setStorage(StorageService storage)
-        {
-            this.storage = storage;
-        }
-
-        private StorageService storage;
     }
 }
