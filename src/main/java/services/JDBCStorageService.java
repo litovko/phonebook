@@ -1,5 +1,6 @@
 package services;
 
+import configs.DBConnection;
 import model.Book;
 import model.Person;
 import model.Phone;
@@ -37,9 +38,9 @@ public class JDBCStorageService implements StorageService
 
         public TransactionScript()
         {
-            String url      = "jdbc:postgresql://192.168.56.101/phonebook";
-            String login    = "postgres";
-            String password = "123456";
+            String url      = DBConnection.JDBC.url();
+            String login    = DBConnection.JDBC.username();
+            String password = DBConnection.JDBC.password();
 
             try
             {
