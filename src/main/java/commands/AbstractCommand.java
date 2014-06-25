@@ -7,12 +7,18 @@ import services.StorageService;
  * <p/>
  * 2014 июн 25
  */
-public abstract class AbstractCommand implements Command
+public abstract class AbstractCommand implements Command, PersistedCommand
 {
-    protected AbstractCommand(StorageService storage)
+    public AbstractCommand(StorageService storage)
     {
         this.storage = storage;
     }
 
-    protected StorageService storage;
+    @Override
+    public StorageService getStorage()
+    {
+        return storage;
+    }
+
+    private StorageService storage;
 }

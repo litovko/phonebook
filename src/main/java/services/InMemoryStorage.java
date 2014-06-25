@@ -31,7 +31,7 @@ public class InMemoryStorage implements StorageService
     @Override
     public List<Person> list(Book book)
     {
-        List<Person> copy = new ArrayList<>(book.getPersons());
+        List<Person> copy = new ArrayList<Person>(book.getPersons());
         Collections.sort(copy, new Comparator<Person>() {
             @Override
             public int compare(Person o1, Person o2) {

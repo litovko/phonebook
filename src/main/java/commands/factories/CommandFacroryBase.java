@@ -1,5 +1,8 @@
-package commands;
+package commands.factories;
 
+import commands.Command;
+import commands.builders.CommandBuilder;
+import commands.UnknownCommand;
 import model.Params;
 
 import java.util.HashMap;

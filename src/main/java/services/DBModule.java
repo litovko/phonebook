@@ -31,7 +31,7 @@ public class DBModule extends AbstractModule
         Map<String, String> props = new HashMap<>();
 
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-        props.put("hibernate.connection.url", "jdbc:postgresql://192.168.56.101/phonebook1");
+        props.put("hibernate.connection.url", "jdbc:postgresql://localhost/phonebook1");
         props.put("hibernate.connection.username", "postgres");
         props.put("hibernate.connection.password", "123456");
         props.put("hibernate.connection.pool_size", "1");

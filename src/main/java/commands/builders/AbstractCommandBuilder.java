@@ -1,4 +1,4 @@
-package commands;
+package commands.builders;
 
 import services.StorageService;
 
@@ -9,14 +9,14 @@ import services.StorageService;
  */
 public abstract class AbstractCommandBuilder implements CommandBuilder
 {
-    protected StorageService service;
+    private StorageService storage;
 
     public AbstractCommandBuilder(StorageService storageService)
     {
-        this.service = storageService;
+        this.storage = storageService;
     }
 
-    public StorageService getService() {
-        return service;
+    public StorageService getStorage() {
+        return storage;
     }
 }

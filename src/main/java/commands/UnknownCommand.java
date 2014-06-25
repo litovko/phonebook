@@ -17,6 +17,9 @@ public class UnknownCommand implements Command
         return instance;
     }
 
+    private UnknownCommand()
+    {}
+
     public static final String NAME = "unknown";
 
     @Override

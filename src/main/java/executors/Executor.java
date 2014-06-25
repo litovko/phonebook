@@ -1,7 +1,7 @@
 package executors;
 
 import commands.Command;
-import commands.CommandFactory;
+import commands.factories.CommandFactory;
 import controllers.ApplicationContext;
 import controllers.CommandLineController;
 import model.Book;

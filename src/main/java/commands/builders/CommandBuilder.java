@@ -1,5 +1,6 @@
-package commands;
+package commands.builders;
 
+import commands.Command;
 import model.Params;
 
 /**
@@ -7,9 +8,7 @@ import model.Params;
  * <p/>
  * 2014 июн 10
  */
-public interface CommandFactory
+public interface CommandBuilder
 {
     Command createCommand(Params params);
-
-    Command createUnknownCommand(Params params);
 }

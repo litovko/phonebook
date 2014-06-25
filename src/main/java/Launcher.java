@@ -1,4 +1,4 @@
-import commands.SupportedCommands;
+import commands.factories.ConsoleCommandsFactory;
 import controllers.FrontController;
 import controllers.SimpleCommandLineController;
 import executors.Executor;
@@ -12,7 +12,7 @@ class Launcher
         FrontController fc = FrontController.getInstance();
         fc.init(
                 SimpleConsoleView.getInstance(),
-                new Executor(SimpleCommandLineController.getInstance(), new SupportedCommands())
+                new Executor(SimpleCommandLineController.getInstance(), ConsoleCommandsFactory.getInstance())
         );
 
         fc.process();
