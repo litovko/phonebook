@@ -8,7 +8,6 @@ import configs.DBConnection;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.swing.text.html.parser.Entity;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +23,10 @@ public class DBModule extends AbstractModule
     {
         bind(StorageService.class).to(HibernateStorageService.class);
     }
+//    protected void configure()
+//    {
+//        bind(StorageService.class).to(JDBCStorageService.class);
+//    }
 
     @Provides
     @Singleton

@@ -42,4 +42,9 @@ public class InMemoryStorage implements StorageService
     public void close() {
 
     }
+
+    @Override
+    public Book getBook(Book book) {
+        return book;
+    }
 }

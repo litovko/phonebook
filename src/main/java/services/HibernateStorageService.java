@@ -22,8 +22,16 @@ public class HibernateStorageService implements StorageService
     }
 
     @Override
+    public Book getBook(Book book) {
+        List<Book> b= manager.createQuery("select b from model.Book b where b.id=1").getResultList();
+        if (b.isEmpty()) return null;
+        return  b.get(0);
+    }
+
+    @Override
     public void add(String personName, String phone, Book book)
     {
+
         Person person = new Person(personName);
         Phone  ph     = new Phone(person, phone);
         person.getPhones().add(ph);
@@ -33,7 +41,7 @@ public class HibernateStorageService implements StorageService
         manager.getTransaction().begin();
         manager.persist(ph);
         manager.persist(person);
-        manager.persist(book);
+        if (getBook(book)==null) manager.persist(book);
 
         manager.getTransaction().commit();
 

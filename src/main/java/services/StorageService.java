@@ -16,4 +16,5 @@ public interface StorageService
 
     List<Person> list(Book book);
     void close();
+    Book getBook(Book book);
 }

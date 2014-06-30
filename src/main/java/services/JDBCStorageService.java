@@ -33,6 +33,11 @@ public class JDBCStorageService implements StorageService
         TransactionScript.getInstance().close();
     }
 
+    @Override
+    public Book getBook(Book book) {
+        return book;
+    }
+
     public static final class TransactionScript
     {
         private static final TransactionScript instance = new TransactionScript();
