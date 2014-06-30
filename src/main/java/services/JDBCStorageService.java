@@ -28,6 +28,11 @@ public class JDBCStorageService implements StorageService
         return TransactionScript.getInstance().listPersons("1");
     }
 
+    @Override
+    public void close() {
+        TransactionScript.getInstance().close();
+    }
+
     public static final class TransactionScript
     {
         private static final TransactionScript instance = new TransactionScript();
@@ -111,6 +116,17 @@ public class JDBCStorageService implements StorageService
             {
                 e.printStackTrace();
             }
+        }
+        public void close()
+        {
+            try
+            {
+                connection.close();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            };
+
         }
 
         private Connection connection;

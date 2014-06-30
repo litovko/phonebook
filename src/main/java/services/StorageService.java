@@ -15,4 +15,5 @@ public interface StorageService
     void add(String personName, String phone, Book book);
 
     List<Person> list(Book book);
+    void close();
 }

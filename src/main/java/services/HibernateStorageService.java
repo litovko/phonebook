@@ -44,5 +44,10 @@ public class HibernateStorageService implements StorageService
         return manager.createQuery("select p from model.Person p").getResultList();
     }
 
+    @Override
+    public void close() {
+        manager.getEntityManagerFactory().close();
+    }
+
     private EntityManager manager;
 }

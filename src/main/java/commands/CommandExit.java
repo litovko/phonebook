@@ -21,7 +21,7 @@ public class CommandExit extends AbstractCommand
 
     @Override
     public void execute(Book model, ApplicationContext ap) {
-        ap.exit();
+        ap.exit(); getStorage().close();
     }
 
     @Override

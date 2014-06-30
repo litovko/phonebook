@@ -1,9 +1,6 @@
 package services;
 
-import controllers.CommandLineController;
-import controllers.SimpleCommandLineController;
 import model.Book;
-import model.Params;
 import model.Person;
 import model.Phone;
 
@@ -39,5 +36,10 @@ public class InMemoryStorage implements StorageService
             }
         });
         return copy;
+    }
+
+    @Override
+    public void close() {
+
     }
 }
