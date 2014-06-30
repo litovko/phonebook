@@ -19,14 +19,14 @@ import java.util.Map;
 public class DBModule extends AbstractModule
 {
     @Override
-    protected void configure()
-    {
-        bind(StorageService.class).to(HibernateStorageService.class);
-    }
 //    protected void configure()
 //    {
-//        bind(StorageService.class).to(JDBCStorageService.class);
+//        bind(StorageService.class).to(HibernateStorageService.class);
 //    }
+    protected void configure()
+    {
+        bind(StorageService.class).to(JDBCStorageService.class);
+    }
 
     @Provides
     @Singleton

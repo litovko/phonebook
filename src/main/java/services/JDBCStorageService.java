@@ -20,6 +20,7 @@ public class JDBCStorageService implements StorageService
     @Override
     public void add(String personName, String phone, Book book)
     {
+        if (getBook(book)==null) return;
         TransactionScript.getInstance().addPerson(personName, phone);
     }
 
@@ -35,6 +36,7 @@ public class JDBCStorageService implements StorageService
 
     @Override
     public Book getBook(Book book) {
+        TransactionScript.getInstance().getBook("1");
         return book;
     }
 
@@ -60,6 +62,32 @@ public class JDBCStorageService implements StorageService
             {
                 e.printStackTrace();
             };
+        }
+        public void getBook(String book_id)
+        {
+            try
+            {
+                PreparedStatement statement = connection.prepareStatement(
+                        "select id from book b \n" +
+                                "where b.id = ?");
+
+                statement.setInt(1, Integer.valueOf(book_id));
+
+                ResultSet r_set = statement.executeQuery();
+                if( r_set.next()) return ;
+                PreparedStatement addBook = connection.prepareStatement("insert into book (id) values (?)", Statement.RETURN_GENERATED_KEYS);
+                addBook.setInt(1, Integer.valueOf(book_id));
+                addBook.execute();
+                ResultSet auto_pk = addBook.getGeneratedKeys();
+                while (auto_pk.next())
+                {
+                    int id = auto_pk.getInt("id");
+                }
+
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
 
         public List<Person> listPersons(String book_id)
