@@ -17,7 +17,7 @@ import java.util.List;
 public class InMemoryStorage implements StorageService
 {
     @Override
-    public void add(String personName, String phone, Book book)
+    public void add(String personName, String phone)
     {
         Person person = new Person(personName);
 
@@ -26,7 +26,7 @@ public class InMemoryStorage implements StorageService
     }
 
     @Override
-    public List<Person> list(Book book)
+    public List<Person> list()
     {
         List<Person> copy = new ArrayList<Person>(book.getPersons());
         Collections.sort(copy, new Comparator<Person>() {
@@ -44,7 +44,9 @@ public class InMemoryStorage implements StorageService
     }
 
     @Override
-    public Book getBook(Book book) {
-        return book;
+    public Book getBook() {
+        return book == null ? book = new Book() : book;
+
     }
+    private Book book;
 }

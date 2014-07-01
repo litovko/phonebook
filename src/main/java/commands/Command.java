@@ -1,7 +1,6 @@
 package commands;
 
 import controllers.ApplicationContext;
-import model.Book;
 
 /**
  * (c) Roman Gordeev
@@ -10,7 +9,7 @@ import model.Book;
  */
 public interface Command
 {
-    void execute(Book model, ApplicationContext ap);
+    void execute(ApplicationContext ap);
 
     String getName();
 }

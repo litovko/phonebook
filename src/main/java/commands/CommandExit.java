@@ -1,7 +1,6 @@
 package commands;
 
 import controllers.ApplicationContext;
-import model.Book;
 import services.StorageService;
 
 /**
@@ -20,7 +19,7 @@ public class CommandExit extends AbstractCommand
     }
 
     @Override
-    public void execute(Book model, ApplicationContext ap) {
+    public void execute(ApplicationContext ap) {
         ap.exit(); getStorage().close();
     }
 

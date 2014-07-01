@@ -1,10 +1,7 @@
 package controllers;
 
 import executors.Executor;
-import model.Book;
-import model.Params;
 import views.ConsoleView;
-import views.SimpleConsoleView;
 
 import java.util.Scanner;
 
@@ -59,10 +56,10 @@ public class FrontController
         return view;
     }
 
-    public Book getModel()
-    {
-        return model;
-    }
+//    public Book getModel()
+//    {
+//        return model;
+//    }
 
     public Executor getExecutor()
     {
@@ -70,7 +67,7 @@ public class FrontController
     }
 
     private ConsoleView view;
-    private Book        model;
+    //private Book        model;
     private Executor    executor;
     private boolean     exit;
     private ApplicationContext ap;

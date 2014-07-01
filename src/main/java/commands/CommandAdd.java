@@ -1,7 +1,6 @@
 package commands;
 
 import controllers.ApplicationContext;
-import model.Book;
 import services.StorageService;
 
 /**
@@ -22,10 +21,10 @@ public class CommandAdd extends AbstractCommand
     }
 
     @Override
-    public void execute(Book model, ApplicationContext ap)
+    public void execute(ApplicationContext ap)
     {
 
-        getStorage().add(this.person, this.phone, model);
+        getStorage().add(this.person, this.phone);
 
         System.out.println(getName() + ": person " + this.person + " was added to the book, phone is: " + this.phone);
     }

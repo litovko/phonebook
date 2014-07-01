@@ -1,7 +1,6 @@
 package commands;
 
 import controllers.ApplicationContext;
-import model.Book;
 import model.Person;
 import model.Phone;
 import services.StorageService;
@@ -24,9 +23,9 @@ public class CommandList extends AbstractCommand
     }
 
     @Override
-    public void execute(Book model, ApplicationContext ap)
+    public void execute(ApplicationContext ap)
     {
-        List<Person> persons = getStorage().list(model);
+        List<Person> persons = getStorage().list();
 
         for (Person p : persons)
             printPerson(p);

@@ -18,15 +18,20 @@ import java.util.List;
 public class JDBCStorageService implements StorageService
 {
     @Override
-    public void add(String personName, String phone, Book book)
+    public void add(String personName, String phone)
     {
-        if (getBook(book)==null) return;
+        if(this.book==null){
+            Book b=getBook();
+        }
         TransactionScript.getInstance().addPerson(personName, phone);
     }
 
     @Override
-    public List<Person> list(Book book) {
-        return TransactionScript.getInstance().listPersons("1");
+    public List<Person> list() {
+        if(this.book==null){
+            Book b=getBook();
+        }
+        return TransactionScript.getInstance().listPersons(this.book.getId().toString());
     }
 
     @Override
@@ -35,9 +40,10 @@ public class JDBCStorageService implements StorageService
     }
 
     @Override
-    public Book getBook(Book book) {
-        TransactionScript.getInstance().getBook("1");
-        return book;
+    public Book getBook() {
+        return book == null ? book = new Book(TransactionScript.getInstance().getBook("1")) : book;
+
+
     }
 
     public static final class TransactionScript
@@ -63,7 +69,7 @@ public class JDBCStorageService implements StorageService
                 e.printStackTrace();
             };
         }
-        public void getBook(String book_id)
+        public  Long getBook(String book_id)
         {
             try
             {
@@ -74,20 +80,36 @@ public class JDBCStorageService implements StorageService
                 statement.setInt(1, Integer.valueOf(book_id));
 
                 ResultSet r_set = statement.executeQuery();
-                if( r_set.next()) return ;
-                PreparedStatement addBook = connection.prepareStatement("insert into book (id) values (?)", Statement.RETURN_GENERATED_KEYS);
-                addBook.setInt(1, Integer.valueOf(book_id));
+                if( r_set.next()){
+                    return r_set.getLong("id");
+                }
+
+
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return newBook();
+        }
+        public Long newBook()
+        {
+            try
+            {
+
+                PreparedStatement addBook = connection.prepareStatement("insert into book (id) values (1)", Statement.RETURN_GENERATED_KEYS);
+
                 addBook.execute();
                 ResultSet auto_pk = addBook.getGeneratedKeys();
                 while (auto_pk.next())
                 {
-                    int id = auto_pk.getInt("id");
+                    return auto_pk.getLong("id");
                 }
 
             } catch (Exception e)
             {
                 e.printStackTrace();
             }
+            return 1l;
         }
 
         public List<Person> listPersons(String book_id)
@@ -163,5 +185,7 @@ public class JDBCStorageService implements StorageService
         }
 
         private Connection connection;
+       ;
     }
+    private Book book;
 }

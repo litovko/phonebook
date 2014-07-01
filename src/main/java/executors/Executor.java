@@ -4,7 +4,6 @@ import commands.Command;
 import commands.factories.CommandFactory;
 import controllers.ApplicationContext;
 import controllers.CommandLineController;
-import model.Book;
 import model.Params;
 
 /**
@@ -14,19 +13,19 @@ import model.Params;
  */
 public class Executor
 {
-    public Executor(Book model, CommandLineController controller, CommandFactory commandFactory)
+    public Executor(CommandLineController controller, CommandFactory commandFactory)
     {
-        this.model = model;
+        //this.model = model;
         this.controller = controller;
         this.commandFactory = commandFactory;
     }
 
 
 
-    public Executor(CommandLineController controller, CommandFactory commandFactory)
-    {
-        this(new Book(), controller, commandFactory);
-    }
+//    public Executor(CommandLineController controller, CommandFactory commandFactory)
+//    {
+//        this(controller, commandFactory);
+//    }
 
 
     public void execute(String commandLine)
@@ -34,7 +33,7 @@ public class Executor
         Params params = getController().parseCommandLineString(commandLine);
         Command command = getCommandFactory().createCommand(params);
 
-        command.execute(getModel(), ap);
+        command.execute(ap);
 
         //System.out.println(params.toString());
     }
@@ -44,10 +43,10 @@ public class Executor
         this.ap = ap;
     }
 
-    public Book getModel()
-    {
-        return model;
-    }
+//    public Book getModel()
+//    {
+//        return model;
+//    }
 
     public CommandLineController getController()
     {
@@ -59,7 +58,7 @@ public class Executor
         return commandFactory;
     }
 
-    private Book model;
+    //private Book model;
     private CommandLineController controller;
     private CommandFactory commandFactory;
     private ApplicationContext ap;

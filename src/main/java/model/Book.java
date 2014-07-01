@@ -15,6 +15,7 @@ public class Book {
     public Book() {
         persons = new HashSet<>();
     }
+    public Book(Long id){persons = new HashSet<>(); ; this.setId(id);}
 
     public Book(Set<Person> persons) {
         this.persons = persons;
